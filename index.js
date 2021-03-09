@@ -101,9 +101,9 @@ function editTasksFunc() {
   var updateDate = document.getElementById("updateDate").value;
   var updateStatus = document.getElementById("updateStatus").value;
   let isoDate = new Date(updateDate).toISOString();
-  console.log(updateTitle);
-  console.log(updateDate);
-  console.log(updateStatus);
+  // console.log(updateTitle);
+  // console.log(updateDate);
+  // console.log(updateStatus);
   
   fetch(url, {
     method: "PUT",

@@ -1,5 +1,6 @@
 let url = "http://34.71.224.0:8080/api/tasks";
- 
+let allTasks = [];
+
 function addTaskFunc() {
   var title = document.getElementById("initialTitle").value;
   var status = document.getElementById("initialStatus").value;
@@ -43,14 +44,17 @@ function getTasks() {
     })
     .then((res) => {
       console.log(res);
+      allTasks = res;
+      console.log(allTasks, "Created tasks");
+
       let tableBody = document.getElementById("tableBody");
       tableBody.innerHTML = "";
       for (let i = 0; i < res.length; i++) {
         // console.log(res[i].name);
         tableBody.innerHTML += `<tr id="task${i}"><td>${res[i].id}</td>
-                            <td>${res[i].name}</td>
-                            <td>${res[i].expiryDate}</td>
-                            <td>${res[i].status}</td>
+        <td id="taskname${res[i].id}">${res[i].name}</td> 
+        <td id="taskdate${res[i].id}">${res[i].expiryDate}</td>
+        <td id="taskstatus${res[i].id}">${res[i].status}</td>
                             <td><button data-target="#editbutton"
                             data-toggle="modal"
                             class="btn btn-warning" onclick="editFunc(${res[i].id})">EDIT</button>
@@ -70,8 +74,16 @@ var taskId = "";
 // var taskDelId = '';
 
 function editFunc(id) {
+  let name = document.getElementById(`taskname${id}`);
+  let date = document.getElementById(`taskdate${id}`);
+  let status = document.getElementById(`taskstatus${id}`);
+  
+  document.getElementById("updateTitle").value = name.textContent;
+  document.getElementById("updateDate").value = date.textContent;
+  document.getElementById("updateStatus").value = status.textContent;
   taskId = id;
   console.log(id);
+  console.log(allTasks, "All Tasks");
   // console.log(id, "ID");
   //var parsedValue = JSON.stringify({id})
   //console.log(parsedValue);
@@ -81,7 +93,7 @@ function editFunc(id) {
 function captureDelId(id) {
   taskDelId = id;
   console.log(id);
-  const delUrl = `${url}/${id}` 
+  const delUrl = `${url}/${id}`;
   fetch(delUrl, {
     method: "DELETE",
     headers: {
@@ -95,7 +107,6 @@ function captureDelId(id) {
   });
 }
 
-
 function editTasksFunc() {
   var updateTitle = document.getElementById("updateTitle").value;
   var updateDate = document.getElementById("updateDate").value;
@@ -104,7 +115,7 @@ function editTasksFunc() {
   // console.log(updateTitle);
   // console.log(updateDate);
   // console.log(updateStatus);
-  
+
   fetch(url, {
     method: "PUT",
     headers: {
@@ -124,8 +135,6 @@ function editTasksFunc() {
     getTasks();
   });
 }
-
-
 
 //   console.log(title.value);
 //   console.log(status.value);
